@@ -1,0 +1,1 @@
+// aca vamos a mover todas las funciones que tengan que ver con base de datos
