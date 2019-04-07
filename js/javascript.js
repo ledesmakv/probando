@@ -79,20 +79,29 @@ function consultarListaPostsUsuario(idUsuario, callbackConsultaPostOK) {
   //console.log('1')
 
   requestLista.onload = function () {
-
+    
     var postUsuario = JSON.parse(requestLista.responseText);
-    //callbackConsultaPostOK(postUsuario);
+        //callbackConsultaPostOK(postUsuario);
     console.log("este es mi postUsuario", postUsuario);
+
+    var aux = [];
+
+    postUsuario.forEach(post => {
+      if (post.userId === idUsuario) {
+        aux.push(post);
+      }
+    })
+    callbackConsultaPostOK(aux);
   }
 
-  requestLista.open("GET", "https://jsonplaceholder.typicode.com/posts?UserId=" + idUsuario);
+  requestLista.open(
+    "GET",
+    "https://jsonplaceholder.typicode.com/posts?UserId=" + idUsuario
+  )
   //console.log('5')
-  requestLista.send();
+  requestLista.send()
 
-
-  var respuesta = [];
-
-
+  var respuesta = []
 
   /*
 
@@ -123,18 +132,20 @@ function verPostsUsuario(idUsuario) {
   divContenedorListaPosts.innerHTML = "";
 
   // Se crea variable para guardar el array de posts, se llena con la función de consulta
-  var listaPosts = consultarListaPostsUsuario(idUsuario);
-  console.log("lista post", listaPosts);
-  // Se recorre el array de posts y para cada uno se crea el elemento en pantalla
-  for (var i = 0; i < listaPosts.length; i++) {
-    ///COMO ACCEDO A LA PROPIEDAD TITULO DE UN OBJETO DENTRO DE UN ARRAY??
+  var listaPosts = consultarListaPostsUsuario(idUsuario, function callback(
+    datos
+  ) {
+    // Se recorre el array de posts y para cada uno se crea el elemento en pantalla
+    for (var i = 0; i < datos.length; i++) {
+      ///COMO ACCEDO A LA PROPIEDAD TITULO DE UN OBJETO DENTRO DE UN ARRAY??
 
-    var nuevoDiv = document.createElement("div");
-    nuevoDiv.setAttribute("class", "post");
-    var textDiv = document.createTextNode(listaPosts[i]);
-    nuevoDiv.append(textDiv);
-    divContenedorListaPosts.appendChild(nuevoDiv);
-  }
+      var nuevoDiv = document.createElement("div");
+      nuevoDiv.setAttribute("class", "post");
+      var textDiv = document.createTextNode(JSON.stringify(datos[i]));
+      nuevoDiv.append(textDiv);
+      divContenedorListaPosts.appendChild(nuevoDiv);
+    }
+  })
 }
 
 
